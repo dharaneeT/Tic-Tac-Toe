@@ -38,13 +38,13 @@ function App() {
     O: "player 2",
   });
   const [gameTurn, setGameTurn] = useState([]);
-  // const [playerActive, setPlayerActive] = useState("X");
   let gameBoard = structuredClone(intialGameBoard);
   for (const Turn of gameTurn) {
     const { squares, player } = Turn;
     const { row, col } = squares;
     gameBoard[row][col] = player;
   }
+  const winner = deriveWinner(gameBoard, players);
 
   let activePlayer = deriveActivePlayer(gameTurn);
   const hasDraw = gameTurn.length === 9 && !winner;
@@ -63,8 +63,6 @@ function App() {
   function handleRematch() {
     setGameTurn([]);
   }
-
-  const winner = deriveWinner(gameBoard, players);
 
   function handlePlayerName(symbol, Name) {
     setPlayers((prePlayers) => {
