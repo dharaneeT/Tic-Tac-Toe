@@ -1,8 +1,11 @@
-export default function Log({ turn }) {
-  for (const turns of turn) {
-    const { squares, player } = turns;
-    const { row, col } = squares;
-    let activePlayer = player === "X" ? "Player 1" : "Player 2";
-  }
-  return <ol id="log"></ol>;
+export default function Log({ turns }) {
+  return (
+    <ol id="log">
+      {turns.map((turn) => (
+        <li key={`${turn.squares.row}${turn.squares.col}`}>
+          {turn.player} Selected {turn.squares.row},{turn.squares.col}
+        </li>
+      ))}
+    </ol>
+  );
 }

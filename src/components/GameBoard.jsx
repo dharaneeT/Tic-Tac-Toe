@@ -1,19 +1,6 @@
 import { useState } from "react";
 
-const intialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
-
-export default function GameBoard({ onChangePlayer, turn }) {
-  let gameArr = intialGameBoard;
-  for (const gTurn of turn) {
-    const { squares, player } = gTurn;
-    const { row, col } = squares;
-    gameArr[row][col] = player;
-  }
-
+export default function GameBoard({ onChangePlayer, board }) {
   // const [gameArr, setGameArr] = useState(intialGameBoard);
 
   // function handleSymbols(rowIndex, colIndex) {
@@ -26,13 +13,16 @@ export default function GameBoard({ onChangePlayer, turn }) {
   // }
   return (
     <ol id="game-board">
-      {gameArr.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
-            {row.map((col, colIndex) => (
+            {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={() => onChangePlayer(rowIndex, colIndex)}>
-                  {col}
+                <button
+                  onClick={() => onChangePlayer(rowIndex, colIndex)}
+                  disabled={playerSymbol !== null}
+                >
+                  {playerSymbol}
                 </button>
               </li>
             ))}
