@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-export default function Player({ initialName, symbol, isActive }) {
+export default function Player({
+  initialName,
+  symbol,
+  isActive,
+  onChangeName,
+}) {
   const [playerName, setPlayerName] = useState(initialName);
   function handleChange(e) {
     setPlayerName(e.target.value);
@@ -20,6 +25,9 @@ export default function Player({ initialName, symbol, isActive }) {
   function handleEditBtn() {
     //note changing states
     setisEditing((pre) => !pre);
+    if (isEditing) {
+      onChangeName(symbol, playerName);
+    }
   }
   return (
     <li className={isActive ? "active" : ""}>

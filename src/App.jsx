@@ -18,9 +18,25 @@ function deriveActivePlayer(game) {
   }
   return activePlayer;
 }
-
-function App() {
+function deriveWinner(gameBoard, players) {
   let winner;
+  for (const combination of WINNING_COMBINATIONS) {
+    const first = gameBoard[combination[0].row][combination[0].column];
+    const second = gameBoard[combination[1].row][combination[1].column];
+    const third = gameBoard[combination[2].row][combination[2].column];
+
+    if (first && first === second && first === third) {
+      winner = players[first];
+    }
+  }
+  return winner;
+}
+////////////////////////////////////////////////////////////////////////////
+function App() {
+  const [players, setPlayers] = useState({
+    X: "player 1",
+    O: "player 2",
+  });
   const [gameTurn, setGameTurn] = useState([]);
   // const [playerActive, setPlayerActive] = useState("X");
   let gameBoard = structuredClone(intialGameBoard);
@@ -48,14 +64,15 @@ function App() {
     setGameTurn([]);
   }
 
-  for (const combination of WINNING_COMBINATIONS) {
-    const first = gameBoard[combination[0].row][combination[0].column];
-    const second = gameBoard[combination[1].row][combination[1].column];
-    const third = gameBoard[combination[2].row][combination[2].column];
+  const winner = deriveWinner(gameBoard, players);
 
-    if (first && first === second && first === third) {
-      winner = first;
-    }
+  function handlePlayerName(symbol, Name) {
+    setPlayers((prePlayers) => {
+      return {
+        ...prePlayers,
+        [symbol]: Name,
+      };
+    });
   }
 
   return (
@@ -66,11 +83,13 @@ function App() {
             initialName="Player 1"
             symbol="X"
             isActive={activePlayer === "X"}
+            onChangeName={handlePlayerName}
           ></Player>
           <Player
             initialName="Player 2"
             symbol="O"
             isActive={activePlayer === "O"}
+            onChangeName={handlePlayerName}
           ></Player>
           {(winner || hasDraw) && (
             <GameOver winner={winner} onRematch={handleRematch} />
